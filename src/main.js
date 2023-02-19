@@ -4,14 +4,11 @@ import App from './App.vue'
 import router from './router'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
-import axios from 'axios'
 import config from './config'
+import request from './util/request'
 
 const app = createApp(App)
 
-console.log(config, 12)
-axios.get(config.mockApi + '/login').then((res) => {
-  console.log(res)
-})
-
+// 一个用于注册能够被应用内所有组件实例访问到的全局属性的对象。
+app.config.globalProperties.$request = request
 app.use(router).use(ElementPlus).mount('#app')
