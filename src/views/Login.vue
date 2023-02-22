@@ -1,7 +1,7 @@
 <template>
   <div class="login-wrapper">
     <div class="model">
-      <el-form ref="userForm" :model="user" status-icon :rules="rules">
+      <el-form ref="userFormRef" :model="user" status-icon :rules="rules">
         <div class="title">Vue后台管理系统</div>
         <el-form-item prop="userName">
           <el-input type="text" prefix-icon="User" v-model="user.userName" />
@@ -10,51 +10,54 @@
           <el-input type="password" prefix-icon="View" v-model="user.userPwd" />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" class="btn-login" @click="login">登录</el-button>
+          <el-button type="primary" class="btn-login" @click="login(userFormRef)">登录</el-button>
         </el-form-item>
       </el-form>
     </div>
   </div>
 </template>
 
-<script>
-  export default {
-    name: 'Login',
-    data() {
-      return {
-        user: {
-          userName: '',
-          userPwd: ''
-        },
-        rules: {
-          userName: [
-            {
-              required: true, message: '请输入用户名', trigger: "blur"
-            }
-          ],
-          userPwd: [
-            {
-              required: true, message: '请输入密码', trigger: "blur"
-            }
-          ]
-        }
-      }
-    },
-    methods: {
-      login() {
-        this.$refs.userForm.validate((valid) => {
-          if(valid) {
-            this.$api.login(this.user).then((res) => {
-              this.$store.commit('saveUserInfo', res)
-              this.$router.push('/welcome')
-            })
-          } else {
-            return false
-          }
-        })
-      }
+<script setup>
+import { reactive, ref } from '@vue/reactivity'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
+import api from '../api'
+
+let user = reactive({
+  userName: '',
+  userPwd: ''
+})
+
+let rules= {
+  userName: [
+    {
+      required: true, message: '请输入用户名', trigger: "blur"
     }
-  }
+  ],
+  userPwd: [
+    {
+      required: true, message: '请输入密码', trigger: "blur"
+    }
+  ]
+}
+
+const userFormRef = ref()
+const store = useStore()
+const router = useRouter()
+
+function login(formRef) {
+  formRef.validate((valid) => {
+    if(valid) {
+      api.login(this.user).then((res) => {
+        store.commit('saveUserInfo', res)
+        router.push('/welcome')
+      })
+    } else {
+      return false
+    }
+  })
+}
+
 </script>
 
 <style lang="scss">
