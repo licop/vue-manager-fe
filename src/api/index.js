@@ -9,7 +9,7 @@ export default {
       url: '/users/login',
       method: 'post',
       data: params,
-      mock: true
+      mock: false
     })
   },
   noticeCount() {
@@ -17,7 +17,7 @@ export default {
       url: '/leave/count',
       method: 'get',
       data: {},
-      mock: true
+      mock: false
     })
   },
   getMenuList() {
@@ -25,7 +25,7 @@ export default {
       url: '/menu/list',
       method: 'get',
       data: {},
-      mock: true
+      mock: false
     })
   }
 }
