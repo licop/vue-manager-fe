@@ -5,8 +5,8 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue';
 import config from './config'
-import request from './util/request'
-import storage from './util/storage'
+import request from './utils/request'
+import storage from './utils/storage'
 import api from './api'
 import store from './store'
 
@@ -22,4 +22,4 @@ for (let [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component);
 }
 
-app.use(router).use(store).use(ElementPlus).mount('#app')
+app.use(router).use(store).use(ElementPlus, { size: "small" }).mount('#app')

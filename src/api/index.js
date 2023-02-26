@@ -1,7 +1,7 @@
 /**
  * api 管理
  */
-import request from "../util/request"
+import request from "../utils/request"
 
 export default {
   login(params) {
@@ -17,7 +17,7 @@ export default {
       url: '/leave/count',
       method: 'get',
       data: {},
-      mock: false
+      mock: true
     })
   },
   getMenuList() {
@@ -25,7 +25,23 @@ export default {
       url: '/menu/list',
       method: 'get',
       data: {},
-      mock: false
+      mock: true
+    })
+  },
+  getUserList(params) {
+    return request({
+      url: '/users/list',
+      method: 'get',
+      data: params,
+      mock: true
+    })
+  },
+  userDel(params) {
+    return request({
+      url: '/users/delete',
+      method: 'post',
+      data: params,
+      mock: true
     })
   }
 }
