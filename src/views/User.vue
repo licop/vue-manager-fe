@@ -250,7 +250,7 @@ export default {
     onMounted(() => {
       getUserList();
       getDeptList();
-      getRoleList();
+      getRoleAllList();
     });
     // 获取用户列表
     const getUserList = async () => {
@@ -325,8 +325,8 @@ export default {
       deptList.value = list;
     };
     // 获取角色列表
-    const getRoleList = async () => {
-      const list = await proxy.$api.getRoleList();
+    const getRoleAllList = async () => {
+      const list = await proxy.$api.getRoleAllList();
       roleList.value = list;
     };
     // 用户弹窗关闭
@@ -388,7 +388,7 @@ export default {
       handleSelectionChange,
       handleCreate,
       getDeptList,
-      getRoleList,
+      getRoleAllList,
       handleClose,
       handleSubmit,
       handleEdit,

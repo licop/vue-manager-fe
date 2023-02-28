@@ -70,7 +70,7 @@
           prop="icon"
           v-show="menuForm.menuType == 1"
         >
-          <el-input v-model="menuForm.icon" placeholder="请输入岗位" />
+          <el-input v-model="menuForm.icon" placeholder="请输入图标" />
         </el-form-item>
         <el-form-item
           label="路由地址"
