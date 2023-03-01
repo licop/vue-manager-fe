@@ -27,7 +27,7 @@
         <el-table-column fixed="right" label="操作" width="200">
           <template #default="scope">
             <el-button type="text" size="small" @click="handleEdit(scope.row)">编辑</el-button>
-            <el-button type="text" size="small">设置权限</el-button>
+            <el-button type="text" size="small" @click="handleOpenPermission(scope.row)">设置权限</el-button>
             <el-button type="text" size="small" @click="handleDel(scope.row._id)">删除</el-button>
           </template>
         </el-table-column>
@@ -65,6 +65,34 @@
         <span class="dialog-footer">
           <el-button @click="handleClose">取 消</el-button>
           <el-button type="primary" @click="handleSubmit">确 定</el-button>
+        </span>
+      </template>
+    </el-dialog>
+
+    <!-- 权限弹框-->
+    <el-dialog title="权限设置" v-model="showPermission">
+      <el-form label-width="100px">
+        <el-form-item label="角色名称">
+          {{ curRoleName }}
+        </el-form-item>
+        <el-form-item label="选择权限">
+          <el-tree
+            ref="tree"
+            :data="menuList"
+            show-checkbox
+            node-key="_id"
+            default-expand-all
+            :props="{ label: 'menuName' }"
+          >
+          </el-tree>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="showPermission = false">取 消</el-button>
+          <el-button type="primary" @click="handlePermissionSubmit"
+            >确 定</el-button
+          >
         </span>
       </template>
     </el-dialog>
@@ -111,8 +139,18 @@ export default {
         {
           label: "权限列表",
           prop: "permissionList",
-          width: 200,        
+          width: 200, 
+          formatter: (row, column, value) => {
+            let names = [];
+            let list = value.halfCheckedKeys || [];
+            list.map((key) => {
+              let name = this.actionMap[key];
+              if (key && name) names.push(name);
+            });
+            return names.join(",");
+          }       
         },
+       
         {
           label: "创建时间",
           prop: "createTime",
@@ -120,12 +158,27 @@ export default {
             return utils.formateDate(new Date(value));
           },
         },
+        {
+          label: "更新时间",
+          prop: "updateTime",
+          formatter(row, column, value) {
+            return utils.formateDate(new Date(value));
+          },
+        },
       ],
-      showModal: false
+      showModal: false,
+       // 权限展示
+      showPermission: false,
+      curRoleId: "",
+      curRoleName: "",
+      menuList: [],
+      // 菜单映射表
+      actionMap: {},
     }
   },
   mounted() {
     this.getRoleList()
+    this.getMenuList()
   },
   methods: {
     // 菜单列表初始化
@@ -141,6 +194,16 @@ export default {
       } catch (error) {
         throw new Error(error)
       }      
+    },
+    // 菜单列表初始化
+    async getMenuList() {
+      try {
+        let list = await this.$api.getMenuList();
+        this.menuList = list;
+        this.getActionMap(list);
+      } catch (e) {
+        throw new Error(e);
+      }
     },
     // 表单重置
     handleReset(form) {
@@ -197,6 +260,57 @@ export default {
       this.pager.pageNum = current;
       this.getRoleList();
     },
+    handleOpenPermission(row) {
+      this.curRoleId = row._id;
+      this.curRoleName = row.roleName;
+      this.showPermission = true;
+      let { checkedKeys } = row.permissionList;
+      setTimeout(() => {
+        this.$refs.tree.setCheckedKeys(checkedKeys);
+      });
+    },
+
+    async handlePermissionSubmit() {
+      let nodes = this.$refs.tree.getCheckedNodes();
+      let halfKeys = this.$refs.tree.getHalfCheckedKeys();
+      let checkedKeys = [];
+      let parentKeys = [];
+      nodes.map((node) => {
+        if (!node.children) {
+          checkedKeys.push(node._id);
+        } else {
+          parentKeys.push(node._id);
+        }
+      });
+      let params = {
+        _id: this.curRoleId,
+        permissionList: {
+          checkedKeys,
+          halfCheckedKeys: parentKeys.concat(halfKeys),
+        },
+      };
+      await this.$api.updatePermission(params);
+      this.showPermission = false;
+      this.$message.success("设置成功");
+      this.getRoleList();
+    },
+    // 递归遍历将key值转化为字典
+    getActionMap(list) {
+      let actionMap = {};
+      const deep = (arr) => {
+        while (arr.length) {
+          let item = arr.pop();
+          if (item.children && item.action) {
+            actionMap[item._id] = item.menuName;
+          }
+          if (item.children && !item.action) {
+            deep(item.children);
+          }
+        }
+      };
+      deep(JSON.parse(JSON.stringify(list)));
+      this.actionMap = actionMap;
+    }
   }
 }
 </script>

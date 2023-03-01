@@ -49,7 +49,7 @@ export default {
       url: '/roles/allList',
       method: 'get',
       data: {},
-      mock: true
+      mock: false
     })
   },
   getRoleList(params) {
@@ -57,7 +57,7 @@ export default {
       url: '/roles/list',
       method: 'get',
       data: params,
-      mock: true
+      mock: false
     })
   },
   roleOperate(params) {
@@ -65,9 +65,17 @@ export default {
         url: '/roles/operate',
         method: 'post',
         data: params,
-        mock: true
+        mock: false
     })
   },
+  updatePermission(params) {
+    return request({
+        url: '/roles/update/permission',
+        method: 'post',
+        data: params,
+        mock: false
+    })
+  }, 
   getDeptList() {
     return request({
       url: '/dept/list',
