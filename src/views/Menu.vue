@@ -213,7 +213,6 @@ export default {
         throw new Error(error)
       }      
     },
-    handleQuery() {},
     // 表单重置
     handleReset(form) {
       this.$refs[form].resetFields()
