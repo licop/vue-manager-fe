@@ -16,7 +16,7 @@
     </div>
     <div class="base-table">
       <div class="action">
-        <el-button type="primary" @click="handleOpen">创建</el-button>
+        <el-button type="primary" @click="handleOpen" v-has="'dept-create'">创建</el-button>
       </div>
       <el-table
         :data="deptList"
@@ -31,13 +31,18 @@
         ></el-table-column>
         <el-table-column label="操作">
           <template #default="scope">
-            <el-button type="text" size="small"  @click="handleEdit(scope.row)"
+            <el-button 
+              type="text" 
+              size="small"  
+              @click="handleEdit(scope.row)" 
+              v-has="'dept-edit'"
               >编辑</el-button
             >
             <el-button
               type="text" 
               size="small"
               @click="handleDel(scope.row._id)"
+              v-has="'dept-delete'"
               >删除</el-button
             >
           </template>

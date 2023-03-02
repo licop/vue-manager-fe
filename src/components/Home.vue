@@ -79,7 +79,7 @@
       handleLogout(key) {
         if(key === 'email') return
         this.$store.commit('saveUserInfo', '')
-        this.userInfo = null
+        this.userInfo = {}
         this.$router.push('/login')
       },
       async getNoticeCount() {
@@ -92,8 +92,11 @@
       },
       async getMenuList() {
         try {
-          const list = await this.$api.getMenuList()
-          this.userMenu = list
+          const { menuList, actionList } = await this.$api.getPermissionList()
+          this.$store.commit("saveMenuList", menuList)
+          this.$store.commit("saveActionList", actionList);
+          this.userMenu = menuList
+
         } catch (error) {
           console.error(error)
         }
