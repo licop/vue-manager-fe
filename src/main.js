@@ -12,10 +12,10 @@ import store from './store'
 
 const app = createApp(App)
 
+// 通过指令控制按钮的显示
 app.directive('has', {
   beforeMount: (el, binding) => {
     let actionList = storage.getItem('actionList')
-    console.log(el, binding.value, actionList, 17)
 
     let value = binding.value
     let hasPermission = actionList.includes(value)

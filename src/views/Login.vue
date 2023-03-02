@@ -21,6 +21,8 @@
 import { reactive, ref } from '@vue/reactivity'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+import storage from '../utils/storage'
+import utils from '../utils/utils'
 import api from '../api'
 
 let user = reactive({
@@ -48,8 +50,9 @@ const router = useRouter()
 function login(formRef) {
   formRef.validate((valid) => {
     if(valid) {
-      api.login(this.user).then((res) => {
+      api.login(this.user).then(async (res) => {
         store.commit('saveUserInfo', res)
+        // await loadAsyncRoutes()
         router.push('/welcome')
       })
     } else {
@@ -57,6 +60,26 @@ function login(formRef) {
     }
   })
 }
+
+async function loadAsyncRoutes() {
+  let userInfo = storage.getItem('userInfo') || {}
+  
+  if(userInfo.token) {
+    try {
+      const { menuList } = await api.getPermissionList()
+      let routes = utils.generateRoute(menuList)
+      routes.map(route => {
+        let url = `../views/${route.component}.vue`
+        route.component = () => import(url)
+        // 动态添加路由
+        router.addRoute("home", route)
+      })
+    } catch (error) {
+      console.log(error) 
+    }
+  }
+} 
+
 
 </script>
 
