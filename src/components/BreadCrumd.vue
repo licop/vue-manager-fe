@@ -13,7 +13,6 @@
 export default {
   name: "BreadCrumb",
   mounted() {
-    console.log(this.$route)
   },
   computed: {
     breadList() {

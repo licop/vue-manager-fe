@@ -12,14 +12,6 @@ export default {
       mock: false
     })
   },
-  noticeCount() {
-    return request({
-      url: '/leave/count',
-      method: 'get',
-      data: {},
-      mock: true
-    })
-  },
   getMenuList(params) {
     return request({
       url: '/menu/list',
@@ -136,6 +128,22 @@ export default {
       url: '/leave/operate',
       method: 'post',
       data: params,
+      mock: false
+    })
+  },
+  leaveApprove(params) {
+    return request({
+      url: '/leave/approve',
+      method: 'post',
+      data: params,
+      mock: false
+    })
+  },
+  noticeCount() {
+    return request({
+      url: '/leave/count',
+      method: 'get',
+      data: {},
       mock: false
     })
   }

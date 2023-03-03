@@ -72,6 +72,11 @@
       this.getNoticeCount()
       this.getMenuList()
     },
+    computed: {
+      noticeCount() {
+        return this.$store.state.noticeCount
+      }
+    },
     methods: {
       toggle() {
         this.isCollapse = !this.isCollapse
@@ -85,7 +90,7 @@
       async getNoticeCount() {
         try {
           const count = await this.$api.noticeCount()
-          this.noticeCount = count
+          this.$store.commit("saveNoticeCount", count)
         } catch (error) {
           console.error(error)
         }
