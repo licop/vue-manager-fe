@@ -5,73 +5,76 @@ import API from './../api'
 import utils from './../utils/utils'
 
 const routes = [
-    {
-        name: 'home',
-        path: '/',
-        meta: {
-            title: '首页'
-        },
-        component: Home,
-        redirect: '/welcome',
-        children: [
-            {
-                name: 'welcome',
-                path: '/welcome',
-                meta: {
-                    title: '欢迎页'
-                },
-                component: () => import('@/views/Welcome.vue')
-            }
-        ]
+  {
+    name: 'home',
+    path: '/',
+    meta: {
+      title: '首页'
     },
-    {
-        name: 'login',
-        path: '/login',
+    component: Home,
+    redirect: '/welcome',
+    children: [
+      {
+        name: 'welcome',
+        path: '/welcome',
         meta: {
-            title: '登录'
+          title: '欢迎页'
         },
-        component: () => import('@/views/Login.vue')
+        component: () => import('@/views/Welcome.vue')
+      }
+    ]
+  },
+  {
+    name: 'login',
+    path: '/login',
+    meta: {
+      title: '登录'
     },
-    {
-        name: '404',
-        path: '/404',
-        meta: {
-            title: '页面不存在'
-        },
-        component: () => import('@/views/404.vue')
-    }
+    component: () => import('@/views/Login.vue')
+  },
+  {
+    name: '404',
+    path: '/404',
+    meta: {
+      title: '页面不存在'
+    },
+    component: () => import('@/views/404.vue')
+  }
 ]
 const router = createRouter({
-    history: createWebHashHistory(),
-    routes
+  history: createWebHashHistory(),
+  routes
 })
 
-// 修复线上部署不能访问问题
+// 根据menu动态加载路由
 async function loadAsyncRoutes() {
-    let userInfo = storage.getItem('userInfo') || {}
-    if (userInfo.token) {
-        try {
-            const { menuList } = await API.getPermissionList()
-            let routes = utils.generateRoute(menuList)
-            const modules = import.meta.glob('../views/\*.vue') 
-            console.log('views',modules)
-            routes.map(route => {
-                let url = `../views/${route.name}.vue`
-                route.component = modules[url];
-                router.addRoute("home", route);
-            })
-        } catch (error) {
-          console.log(error)
-        }
+  let userInfo = storage.getItem('userInfo') || {}
+  if (userInfo.token) {
+    try {
+      const { menuList } = await API.getPermissionList()
+      let routes = utils.generateRoute(menuList)
+      // Vite 支持使用特殊的 import.meta.glob 函数从文件系统导入多个模块
+      // https://cn.vitejs.dev/guide/features.html#glob-import
+      const modules = import.meta.glob('../views/\*.vue') 
+      console.log('views', modules)
+      routes.map(route => {
+        let url = `../views/${route.name}.vue`
+        route.component = modules[url];
+        // 添加路由
+        router.addRoute("home", route);
+      })
+    } catch (error) {
+      console.log(error)
     }
+  }
 }
-loadAsyncRoutes();
 
+loadAsyncRoutes();
 
 // 导航守卫
 router.beforeEach(async (to, from, next) => {
-  console.log(router, to, from, 73)
   if (to.name) {
+    // hasRoute判断路由是否存在
     if (router.hasRoute(to.name)) {
       document.title = to.meta.title;
       next()
@@ -89,5 +92,6 @@ router.beforeEach(async (to, from, next) => {
     }
   }
 })
+
 
 export default router

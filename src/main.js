@@ -16,7 +16,7 @@ const app = createApp(App)
 app.directive('has', {
   beforeMount: (el, binding) => {
     let actionList = storage.getItem('actionList')
-
+    
     let value = binding.value
     let hasPermission = actionList.includes(value)
     if(!hasPermission) {
