@@ -188,6 +188,10 @@ export default {
         },
       },
       {
+        label: "部门",
+        prop: "deptName",
+      },
+      {
         label: "注册时间",
         prop: "createTime",
         formatter: (row, column, value) => {
