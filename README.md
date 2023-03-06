@@ -1,7 +1,19 @@
-# Vue 3 + Vite
+# vue-manager-fe
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Vue 实现公司管理中后台基础功能，使用 RBAC 权限设计模式，包含用户管理、菜单管理、角色管理、部门管理、休假申请和审批功能。
 
-## Recommended IDE Setup
+![](./src/assets//manager.png)
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+**技术栈**
+
+- 前端框架：Vue3.0
+- 路由管理：vue-router
+- 用户界面：ElementPlus
+- 全局状态管理：vuex
+- 网络请求：Axios
+- 工程化管理：Vite
+- 接口 MOCK 平台：https://www.fastmock.site/#/
+
+管理员用户： admin， 密码： 123456
+
+[项目后端代码](https://github.com/licop/vue-manager-server)

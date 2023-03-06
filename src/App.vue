@@ -3,12 +3,9 @@
 </template>
 
 <script>
-  export default {
-    name: 'App',
-    mounted() {
-      this.$storage.setItem("name", "Tom")
-    }
-  }
+export default {
+  name: 'App'
+}
 </script>
 
 <style lang="scss">
