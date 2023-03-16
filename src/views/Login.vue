@@ -80,7 +80,6 @@ async function loadAsyncRoutes() {
   }
 } 
 
-
 </script>
 
 <style lang="scss">

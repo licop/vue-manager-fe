@@ -138,7 +138,7 @@ export default {
   name: "user",
   setup() {
     // 获取Composition API 上下文对象
-    const { ctx, proxy } = getCurrentInstance();
+    const { proxy } = getCurrentInstance();
     const app = getCurrentInstance();
     // 初始化用户表单对象
     const user = reactive({
